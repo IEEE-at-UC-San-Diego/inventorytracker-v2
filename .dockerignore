@@ -1,0 +1,16 @@
+node_modules
+.output
+.nitro
+.tanstack
+.convex
+.git
+.env
+.env.*
+!.env.example
+*.local
+.DS_Store
+.vscode
+.claude
+.agents
+Dockerfile
+docker-compose.yml
