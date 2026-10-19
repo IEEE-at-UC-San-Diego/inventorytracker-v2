@@ -4,7 +4,7 @@ set -e
 
 if [ -z "$CONVEX_SELF_HOSTED_ADMIN_KEY" ]; then
   echo "CONVEX_SELF_HOSTED_ADMIN_KEY is not set; skipping Convex deploy."
-  echo "Generate one with: docker exec <backend container> ./generate_admin_key.sh"
+  echo "Generate one with: docker exec <convex container> ./generate_admin_key.sh"
   exit 0
 fi
 

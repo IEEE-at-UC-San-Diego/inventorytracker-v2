@@ -35,24 +35,20 @@ Built with TanStack Start, Convex, and Logto.
 
 ## Deploy (Dokploy + self-hosted Convex)
 
-`docker-compose.yml` runs the app, a self-hosted Convex backend and dashboard,
-and a one-shot `convex-deploy` job that pushes `convex/` before the app starts.
+Convex runs as its own self-hosted service. `docker-compose.yml` builds the app
+and runs a one-shot `convex-deploy` job that pushes `convex/` to that instance
+(and sets `LOGTO_ENDPOINT` / `LOGTO_APP_ID` on it) before the app starts.
 
 1. In Dokploy, create a **Compose** service pointing at this repo.
-2. Copy `.env.docker.example` into its Environment tab and fill it in. Leave
-   `CONVEX_SELF_HOSTED_ADMIN_KEY` empty for now.
-3. Add domains: `app` → 3000, `backend` → 3210 (`CONVEX_CLOUD_ORIGIN`),
-   `backend` → 3211 (`CONVEX_SITE_ORIGIN`), `dashboard` → 6791.
-4. Deploy. The Convex step is skipped because there is no admin key yet.
-5. Generate the key with `docker exec <backend container> ./generate_admin_key.sh`,
-   set `CONVEX_SELF_HOSTED_ADMIN_KEY`, and deploy again. Every deploy after this
-   pushes the Convex functions and sets `LOGTO_ENDPOINT` / `LOGTO_APP_ID` on the
-   backend. The same key logs you into the dashboard.
-6. Add `https://<app domain>/callback` and `https://<app domain>` to the Logto
+2. Copy `.env.docker.example` into its Environment tab and fill it in.
+   `CONVEX_URL` is your Convex API URL (port 3210) with no trailing slash, and
+   the admin key comes from `./generate_admin_key.sh` in the Convex container.
+3. Add a domain for `app` → 3000 and deploy.
+4. Add `https://<app domain>/callback` and `https://<app domain>` to the Logto
    app's redirect URIs.
 
 The `VITE_*` values are baked into the client bundle at build time, so changing
-a domain or the Logto app means a rebuild (any Dokploy redeploy does that).
+the Convex URL or the Logto app means a rebuild (any Dokploy redeploy does that).
 
 ## How auth works
 
