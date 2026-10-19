@@ -56,6 +56,10 @@ function useLogtoForConvex() {
   // load so Convex doesn't treat a token refresh as signing out.
   const [settled, setSettled] = useState(false)
   if (!settled && !logto.isLoading) setSettled(true)
+  // Still report loading while signed out, e.g. while /callback finishes
+  // signing in. Otherwise Convex keeps its "signed out" result and briefly
+  // shows the session-rejected screen before the server confirms the token.
+  const isLoading = !settled || (logto.isLoading && !logto.isAuthenticated)
 
   const fetchAccessToken = useCallback(
     async ({ forceRefreshToken }: { forceRefreshToken: boolean }) => {
@@ -71,11 +75,11 @@ function useLogtoForConvex() {
 
   return useMemo(
     () => ({
-      isLoading: !settled,
+      isLoading,
       isAuthenticated: logto.isAuthenticated,
       fetchAccessToken,
     }),
-    [settled, logto.isAuthenticated, fetchAccessToken],
+    [isLoading, logto.isAuthenticated, fetchAccessToken],
   )
 }
 
