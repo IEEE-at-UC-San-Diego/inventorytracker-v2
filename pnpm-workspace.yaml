@@ -10,3 +10,6 @@ skills:
   dirs:
     - .claude/skills
     - .agents/skills
+
+overrides:
+  postcss-selector-parser: 7.1.7
